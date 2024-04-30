@@ -16,13 +16,13 @@ namespace familys.Models
         public string? Avatar { get; set; }
         public int? LikeCount { get; set; }
         public int? ShareCount { get; set; }
-        public ulong? IsDelete { get; set; }
-        public string? Createby { get; set; }
-        public DateTime? CreateTime { get; set; }
-        public string? Updateby { get; set; }
-        public DateTime? UpdateTime { get; set; }
-        public string? DeleteBy { get; set; }
-        public DateTime? DeleteTime { get; set; }
+        public Boolean? IsDelete { get; set; }
+        public string Createby { get; set; }
+        public DateTime CreateTime { get; set; }
+        public string Updateby { get; set; }
+        public DateTime UpdateTime { get; set; }
+        public string DeleteBy { get; set; }
+        public DateTime DeleteTime { get; set; }
 
         public virtual Account? Acc { get; set; }
         public virtual ICollection<History> Histories { get; set; }

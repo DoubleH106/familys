@@ -63,6 +63,8 @@ namespace familys.Controllers
                     IsDelete = false,
                     Createby = account.Name,
                     CreateTime = DateTime.Now,
+                    Updateby="",
+                    DeleteBy="",
                 };
                 _context.Accounts.Add(account1);
                 _context.SaveChanges();

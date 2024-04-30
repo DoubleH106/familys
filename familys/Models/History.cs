@@ -9,7 +9,7 @@ namespace familys.Models
         public int? AccId { get; set; }
         public int? HomeId { get; set; }
         public string? Comment { get; set; }
-        public ulong? IsDelete { get; set; }
+        public Boolean? IsDelete { get; set; }
         public string? Createby { get; set; }
         public DateTime? CreateTime { get; set; }
         public string? Updateby { get; set; }
