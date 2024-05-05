@@ -1,5 +1,6 @@
 ﻿using familys.Models;
 using familys.ModelView;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
@@ -77,6 +78,30 @@ namespace familys.Controllers
                 status = status,
             };
             return Ok(result);
+        }
+        [HttpPost("CheckAcc")]
+        public async Task<IActionResult> CheckAcc([FromBody] MD5Mk mD5Mk)
+        {
+            string inputPassword = mD5Mk.Name;
+            bool login = false;
+            bool isAdmin = false;
+            string code = "";
+
+            using (MD5 md5 = MD5.Create())
+            {
+                // Chuyển đổi mật khẩu nhập vào thành giá trị băm
+                byte[] inputBytes = Encoding.ASCII.GetBytes(inputPassword);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Chuyển đổi giá trị băm thành chuỗi hex
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+                string inputHash = sb.ToString();
+                return Ok(inputHash);
+            }
         }
     }
 }

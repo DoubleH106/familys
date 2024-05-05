@@ -2,7 +2,9 @@
 using familys.ModelView;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Principal;
+using System;
 
 namespace familys.Controllers
 {
@@ -28,8 +30,6 @@ namespace familys.Controllers
                     Title = addHome.Title,
                     AccId = addHome.AccId,
                     Avatar = addHome.Avatar,
-                    ShareCount = addHome.Share == null ? 0 : addHome.Share,
-                    LikeCount = addHome.Like == null ? 0 : addHome.Like,
                     IsDelete = false,
                     Createby = _context.Accounts.FirstOrDefault(x => x.IsDelete == false && x.Id == addHome.AccId).Name,
                     CreateTime = DateTime.Now,
@@ -58,15 +58,18 @@ namespace familys.Controllers
             var title = "";
             try
             {
-                var data = _context.Homes.Where(x => x.IsDelete == false && x.AccId == 1).Select(x => new
-                {
-                    x.Avatar,
-                    x.Title,
-                    x.LikeCount,
-                    x.ShareCount,
-                    ListComment = _context.Histories.Where(t=>t.IsDelete == false && t.AccId ==x.AccId).ToList(),
-                });
-                return Ok(data);
+                var homePosts = from a in _context.Homes.Where(x => x.AccId == accId.accId ||
+                                                _context.Listfriends.Any(a => a.AccId == accId.accId && a.FriendId == x.AccId) ||
+                                                _context.Listfriends.Any(b => b.FriendId == accId.accId && b.AccId == x.AccId)).OrderByDescending(post => post.CreateTime)
+                                select new
+                                {
+                                    UserName = _context.Accounts.FirstOrDefault(x => x.Id == a.AccId && x.IsDelete == false).Name,
+                                    AvatarUser = _context.Accounts.FirstOrDefault(x => x.Id == a.AccId && x.IsDelete == false).Avatars,
+                                    a.Title,
+                                    a.Avatar,
+                                    ListComment = _context.Histories.Where(t => t.IsDelete == false && t.AccId == a.AccId && t.HomeId == a.Id).ToList(),
+                                };
+                return Ok(homePosts);
             }
             catch (Exception ex)
             {
@@ -80,5 +83,6 @@ namespace familys.Controllers
             };
             return Ok(result);
         }
+
     }
 }

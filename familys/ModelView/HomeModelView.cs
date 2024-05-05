@@ -13,6 +13,6 @@
     }
     public class AccId
     {
-        public int id { get; set; }
+        public int accId { get; set; }
     }
 }

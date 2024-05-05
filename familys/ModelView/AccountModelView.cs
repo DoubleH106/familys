@@ -13,4 +13,8 @@
         public string Address { get; set; }
         public string BirthDay { get; set; }
     }
+    public class MD5Mk
+    {
+        public string Name { get; set; }
+    }
 }

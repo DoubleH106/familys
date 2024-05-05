@@ -8,6 +8,7 @@ namespace familys.Models
         public Account()
         {
             Avatars = new HashSet<Avatar>();
+            Comments = new HashSet<Comment>();
             Histories = new HashSet<History>();
             Homes = new HashSet<Home>();
             ListfriendAccs = new HashSet<Listfriend>();
@@ -25,12 +26,13 @@ namespace familys.Models
         public Boolean? IsDelete { get; set; }
         public string? Createby { get; set; }
         public DateTime? CreateTime { get; set; }
-        public string Updateby { get; set; }
-        public DateTime UpdateTime { get; set; }
-        public string DeleteBy { get; set; }
-        public DateTime DeleteTime { get; set; }
+        public string? Updateby { get; set; }
+        public DateTime? UpdateTime { get; set; }
+        public string? DeleteBy { get; set; }
+        public DateTime? DeleteTime { get; set; }
 
         public virtual ICollection<Avatar> Avatars { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<History> Histories { get; set; }
         public virtual ICollection<Home> Homes { get; set; }
         public virtual ICollection<Listfriend> ListfriendAccs { get; set; }

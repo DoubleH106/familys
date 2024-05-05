@@ -18,6 +18,8 @@ namespace familys.Models
 
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Avatar> Avatars { get; set; } = null!;
+        public virtual DbSet<Comment> Comments { get; set; } = null!;
+        public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; } = null!;
         public virtual DbSet<History> Histories { get; set; } = null!;
         public virtual DbSet<Home> Homes { get; set; } = null!;
         public virtual DbSet<Listfriend> Listfriends { get; set; } = null!;
@@ -44,6 +46,8 @@ namespace familys.Models
                 entity.Property(e => e.Address).HasMaxLength(255);
 
                 entity.Property(e => e.Avatar).HasMaxLength(255);
+
+                entity.Property(e => e.Birthday).HasMaxLength(50);
 
                 entity.Property(e => e.CreateTime).HasColumnType("datetime");
 
@@ -104,6 +108,63 @@ namespace familys.Models
                     .HasConstraintName("avatar_ibfk_1");
             });
 
+            modelBuilder.Entity<Comment>(entity =>
+            {
+                entity.ToTable("comments");
+
+                entity.HasIndex(e => e.AccId, "AccID");
+
+                entity.HasIndex(e => e.HomeId, "HomeID");
+
+                entity.Property(e => e.Id).HasColumnType("int(11)");
+
+                entity.Property(e => e.AccId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("AccID");
+
+                entity.Property(e => e.Comment1)
+                    .HasColumnType("text")
+                    .HasColumnName("Comment");
+
+                entity.Property(e => e.CreateBy).HasMaxLength(50);
+
+                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.DeleteBy).HasMaxLength(50);
+
+                entity.Property(e => e.DeleteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.HomeId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("HomeID");
+
+                entity.Property(e => e.UpdateBy).HasMaxLength(50);
+
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Acc)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.AccId)
+                    .HasConstraintName("comments_ibfk_1");
+
+                entity.HasOne(d => d.Home)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.HomeId)
+                    .HasConstraintName("comments_ibfk_2");
+            });
+
+            modelBuilder.Entity<Efmigrationshistory>(entity =>
+            {
+                entity.HasKey(e => e.MigrationId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("__efmigrationshistory");
+
+                entity.Property(e => e.MigrationId).HasMaxLength(150);
+
+                entity.Property(e => e.ProductVersion).HasMaxLength(32);
+            });
+
             modelBuilder.Entity<History>(entity =>
             {
                 entity.ToTable("history");
@@ -117,8 +178,6 @@ namespace familys.Models
                 entity.Property(e => e.AccId)
                     .HasColumnType("int(11)")
                     .HasColumnName("AccID");
-
-                entity.Property(e => e.Comment).HasColumnType("text");
 
                 entity.Property(e => e.CreateTime).HasColumnType("datetime");
 
@@ -172,10 +231,6 @@ namespace familys.Models
                 entity.Property(e => e.DeleteTime).HasColumnType("datetime");
 
                 entity.Property(e => e.IsDelete).HasColumnType("bit(1)");
-
-                entity.Property(e => e.LikeCount).HasColumnType("int(11)");
-
-                entity.Property(e => e.ShareCount).HasColumnType("int(11)");
 
                 entity.Property(e => e.Title).HasMaxLength(255);
 
