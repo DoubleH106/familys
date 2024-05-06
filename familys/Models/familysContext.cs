@@ -120,7 +120,7 @@ namespace familys.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("AccID");
 
-                entity.Property(e => e.Comment1)
+                entity.Property(e => e.Comments)
                     .HasColumnType("text")
                     .HasColumnName("Comment");
 

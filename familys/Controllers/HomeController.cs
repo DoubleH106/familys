@@ -93,9 +93,15 @@ namespace familys.Controllers
                                     AvatarUser = _context.Avatars.FirstOrDefault(x => x.Id == a.AccId && x.IsDelete == false).Avatars,
                                     a.Title,
                                     a.Avatar,
-                                    //likepost = _context.Histories.Where(x => x.IsDelete == false && x.AccId == accId.accId && x.Likes == true),
-                                    ListComment = _context.Histories.Where(t => t.IsDelete == false && t.AccId == a.AccId && t.HomeId == a.Id).ToList(),
+                                    likepost = _context.Histories.FirstOrDefault(x => x.IsDelete == false && x.AccId == accId.accId && x.HomeId == a.Id) == null || false ? false : true,
                                     create = GetElapsedTime(a.CreateTime.Value),
+                                    ListComment = (from b in _context.Comments.Where(t => t.IsDelete == false && t.AccId == a.AccId && t.HomeId == a.Id)
+                                                   select new
+                                                   {
+                                                       b.Comments,
+                                                       AccountName = _context.Accounts.FirstOrDefault(x => x.IsDelete == false && x.Id == b.AccId).Name,
+                                                       Avatar = _context.Avatars.FirstOrDefault(x => x.IsDelete == false && x.Id == b.AccId).Avatars,
+                                                   }).ToList(),
                                 };
                 return Ok(homePosts);
             }
@@ -147,6 +153,68 @@ namespace familys.Controllers
             };
             return Ok(result);
         }
-
+        [HttpPost("offlikepost")]
+        public async Task<IActionResult> offLikePost([FromBody] likePost likePost)
+        {
+            Boolean status = false;
+            var title = "";
+            try
+            {
+                var historyLike = _context.Histories.FirstOrDefault(x => x.IsDelete == false && x.AccId == likePost.accId && x.HomeId == likePost.homeId);
+                if (historyLike != null)
+                {
+                    historyLike.Likes = false;
+                    historyLike.Updateby = _context.Accounts.FirstOrDefault(x => x.IsDelete == false && x.Id == likePost.accId).Name;
+                    historyLike.UpdateTime = DateTime.Now;
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                status = true;
+                title = "Lỗi" + ex.Message;
+            }
+            var result = new
+            {
+                status,
+                title
+            };
+            return Ok(result);
+        }
+        [HttpPost("Comments")]
+        public async Task<IActionResult> addComment([FromBody] addComment comments)
+        {
+            bool status = false;
+            var title = "";
+            try
+            {
+                Comment comment = new Comment
+                {
+                    AccId = comments.accId,
+                    HomeId = comments.homeId,
+                    Comments = comments.comment,
+                    IsDelete = false,
+                    CreateBy = _context.Accounts.FirstOrDefault(x => x.IsDelete == false && x.Id == comments.accId).Name,
+                    CreateTime = DateTime.Now,
+                    UpdateBy = "",
+                    DeleteBy = "",
+                };
+                _context.Comments.Add(comment);
+                _context.SaveChanges();
+                status = false;
+                title = "Thành công";
+            }
+            catch (Exception ex)
+            {
+                status = true;
+                title = ex.Message;
+            };
+            var result = new
+            {
+                status,
+                title
+            };
+            return Ok(result);
+        }
     }
 }

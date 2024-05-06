@@ -20,4 +20,10 @@
         public int accId { get; set; }
         public int homeId { get; set; }
     }
+    public class addComment
+    {
+        public int accId { get; set; }
+        public int homeId { get; set; }
+        public string comment { get; set; }
+    }
 }

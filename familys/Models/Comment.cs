@@ -8,8 +8,8 @@ namespace familys.Models
         public int Id { get; set; }
         public int? AccId { get; set; }
         public int? HomeId { get; set; }
-        public string? Comment1 { get; set; }
-        public Boolean? IsDelete { get; set; }  
+        public string? Comments { get; set; }
+        public bool? IsDelete { get; set; }
         public string CreateBy { get; set; } = null!;
         public DateTime CreateTime { get; set; }
         public string UpdateBy { get; set; } = null!;
