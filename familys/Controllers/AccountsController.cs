@@ -58,7 +58,7 @@ namespace familys.Controllers
                     Phone = account.Phone,
                     Name = account.Name,
                     Birthday = account.BirthDay,
-                    Avatar = account.Avatar,
+                    //Avatar = account.Avatar,
                     Address = account.Address,
                     Password = pass,
                     IsDelete = false,

@@ -15,4 +15,9 @@
     {
         public int accId { get; set; }
     }
+    public class likePost
+    {
+        public int accId { get; set; }
+        public int homeId { get; set; }
+    }
 }

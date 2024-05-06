@@ -45,8 +45,6 @@ namespace familys.Models
 
                 entity.Property(e => e.Address).HasMaxLength(255);
 
-                entity.Property(e => e.Avatar).HasMaxLength(255);
-
                 entity.Property(e => e.Birthday).HasMaxLength(50);
 
                 entity.Property(e => e.CreateTime).HasColumnType("datetime");
@@ -84,7 +82,7 @@ namespace familys.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("AccID");
 
-                entity.Property(e => e.Avatar1)
+                entity.Property(e => e.Avatars)
                     .HasMaxLength(255)
                     .HasColumnName("Avatar");
 
