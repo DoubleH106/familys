@@ -93,7 +93,7 @@ namespace familys.Controllers
                                     AvatarUser = _context.Avatars.FirstOrDefault(x => x.Id == a.AccId && x.IsDelete == false).Avatars,
                                     a.Title,
                                     a.Avatar,
-                                    likepost = _context.Histories.FirstOrDefault(x => x.IsDelete == false && x.AccId == accId.accId && x.HomeId == a.Id) == null || false ? false : true,
+                                    likepost = _context.Histories.FirstOrDefault(x => x.IsDelete == false && x.Likes == true && x.AccId == accId.accId && x.HomeId == a.Id) == null || false ? false : true,
                                     create = GetElapsedTime(a.CreateTime.Value),
                                     ListComment = (from b in _context.Comments.Where(t => t.IsDelete == false && t.AccId == a.AccId && t.HomeId == a.Id)
                                                    select new
@@ -138,7 +138,7 @@ namespace familys.Controllers
                 _context.Histories.Add(history);
                 _context.SaveChanges();
                 status = false;
-                title = "Thành công";
+                title = "Thành Công.";
             }
             catch
             {
@@ -156,17 +156,19 @@ namespace familys.Controllers
         [HttpPost("offlikepost")]
         public async Task<IActionResult> offLikePost([FromBody] likePost likePost)
         {
-            Boolean status = false;
+            bool status = false;
             var title = "";
             try
             {
-                var historyLike = _context.Histories.FirstOrDefault(x => x.IsDelete == false && x.AccId == likePost.accId && x.HomeId == likePost.homeId);
+                var historyLike = _context.Histories.FirstOrDefault(x => x.IsDelete == false && x.Likes == true && x.AccId == likePost.accId && x.HomeId == likePost.homeId);
                 if (historyLike != null)
                 {
                     historyLike.Likes = false;
                     historyLike.Updateby = _context.Accounts.FirstOrDefault(x => x.IsDelete == false && x.Id == likePost.accId).Name;
                     historyLike.UpdateTime = DateTime.Now;
                     _context.SaveChanges();
+                    status = false;
+                    title = "Thành Công";
                 }
             }
             catch (Exception ex)
