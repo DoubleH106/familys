@@ -218,5 +218,34 @@ namespace familys.Controllers
             };
             return Ok(result);
         }
+        [HttpPost("listComments")]
+        public async Task<IActionResult> listComments([FromBody] addComment comment)
+        {
+            bool status = false;
+            var title = "";
+            try
+            {
+                var listcomments = from a in _context.Comments.Where(x => x.IsDelete == false && x.HomeId == comment.homeId)
+                                   select new
+                                   {
+                                       acc = _context.Accounts.FirstOrDefault(x => x.IsDelete == false && x.Id == a.AccId).Name,
+                                       Avatars = _context.Avatars.FirstOrDefault(x => x.IsDelete == false && x.Id == a.AccId).Avatars,
+                                       a.Comments,
+                                   };
+                return Ok(listcomments);
+            }
+            catch
+            {
+                status = true;
+                title = "Đã có lỗi.";
+            }
+            var result = new
+            {
+                status,
+                title,
+            };
+            return Ok(result);
+        }
+
     }
 }
